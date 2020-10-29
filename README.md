@@ -1,8 +1,8 @@
 # F20-CS179G
 
-Hazel Nguyen: 862054134
+hnguy154/Hazel Nguyen: 862054134
 
-Sandy Tsan:
+stsan003/Sandy Tsan: 861299012
 
 Ashly Hernandez:
 
