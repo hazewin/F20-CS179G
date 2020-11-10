@@ -244,16 +244,20 @@ public class DBproject{
 			while(keepon){
 				System.out.println("MAIN MENU");
 				System.out.println("---------");
-				System.out.println("1. Add Plane");
-				System.out.println("2. Add Pilot");
-				System.out.println("3. Add Flight");
-				System.out.println("4. Add Technician");
-				System.out.println("5. Book Flight");
-				System.out.println("6. List number of available seats for a given flight.");
-				System.out.println("7. List total number of repairs per plane in descending order");
-				System.out.println("8. List total number of repairs per year in ascending order");
-				System.out.println("9. Find total number of passengers with a given status");
-				System.out.println("10. < EXIT");
+				System.out.println("1. Add User");
+				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
+				System.out.println("3. View Post");
+				System.out.println("4. Follow a user");
+				System.out.println("5. Search user by username"); //view profile of user
+				System.out.println("6. Search user by tags");
+				System.out.println("7. View photos based on tags");
+				System.out.println("8. View photos based on users"); //view pictures of the user
+				System.out.println("9. View photos based on date");
+				System.out.println("10. View newsfeed of top photos");
+				System.out.println("11. View statistics of a photo");
+				System.out.println("12. List top photos of the database");
+				System.out.println("13. List out most popular users of the database");
+				System.out.println("14. < EXIT");
 				
 				switch (readChoice()){
 					case 1: AddPlane(esql); break;
