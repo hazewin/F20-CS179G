@@ -28,9 +28,10 @@ NOTE:
 2. Run compile.sh compiles your code in src
 3. Run run.sh executes src code with inputs dbname, port, user.
 
-example: run.sh flightDB 7432 hbae003
-or source ./run.sh flightDB 5432 user
-java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER
+example: 
+`run.sh flightDB 7432 hbae003`
+or `source ./run.sh flightDB 5432 user`
+`java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER`
 
 # Extra Functionalities
 
