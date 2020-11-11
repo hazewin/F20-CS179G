@@ -30,7 +30,9 @@ NOTE:
 
 example: 
 `run.sh flightDB 7432 hbae003`
+
 or `source ./run.sh flightDB 5432 user`
+
 `java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER`
 
 # Extra Functionalities
