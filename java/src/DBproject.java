@@ -19,6 +19,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -266,8 +267,8 @@ public class DBproject{
 					case 4: AddTechnician(esql); break;
 					case 5: BookFlight(esql); break;
 					case 6: ListNumberOfAvailableSeats(esql); break;
-					case 7: ListsTotalNumberOfRepairsPerPlane(esql); break;
-					case 8: ListTotalNumberOfRepairsPerYear(esql); break;
+					case 7: ViewPhotosByTag(esql); break;
+					case 8: ViewPhotosOfUser(esql); break;
 					case 9: FindPassengersCountWithStatus(esql); break;
 					case 10: keepon = false; break;
 				}
@@ -324,12 +325,37 @@ public class DBproject{
 		// For flight number and date, find the number of availalbe seats (i.e. total plane capacity minus booked seats )
 	}
 
-	public static void ListsTotalNumberOfRepairsPerPlane(DBproject esql) {//7
-		// Count number of repairs per planes and list them in descending order
+	public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
+		// User enters a tag to search and database replies with photos containing tag
+
+		System.out.print("\nWhich hashtag would you like to see photos for? : ");
+		String hashtag = in.readLine();
+
+		esql.executeQueryAndPrintResult("select photo_url from post where tags = '#" + hashtag + "'");
+		
 	}
 
-	public static void ListTotalNumberOfRepairsPerYear(DBproject esql) {//8
-		// Count repairs per year and list them in ascending order
+	public static void ViewPhotosOfUser(DBproject esql) throws IOException {// 8
+		// Enter username or user full name and get photos of them
+
+		System.out.println("1: Search by Full Name");
+		System.out.println("2: Search by username");
+		System.out.println("----------------------");
+		System.out.print("Enter Choice: "); 
+
+		switch(readChoice()){
+			case 1: System.out.print("Enter users full name: ");
+					String fullName = in.readLine();
+					esql.executeQueryAndPrintResult("select photo_url from post where username_id = (select username from users where fullname = " + fullName + "');")
+			break;
+			case 2: System.out.print("Enter users username: ");
+					String username = in.readLine();
+					esql.executeQueryAndPrintResult("select photo_url from post where username_id = '" + username + "';");
+					break;
+		}
+		
+
+		
 	}
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//9
