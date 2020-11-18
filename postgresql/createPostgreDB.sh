@@ -22,3 +22,4 @@ cp data/*.csv /tmp/$(logname)/mydb/data/
 echo "Initializing tables .. "
 sleep 1
 psql -h localhost $dbname < sql/create.sql
+echo "this is sandy's test!"
