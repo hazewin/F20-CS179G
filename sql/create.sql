@@ -1,31 +1,25 @@
-DROP TABLE User CASCADE;
-DROP TABLE Post CASCADE;
-DROP TABLE UserProfile CASCADE;
+DROP TABLE IF EXISTS DBUsers CASCADE;
+DROP TABLE IF EXISTS Post CASCADE;
+DROP TABLE IF EXISTS UserProfile CASCADE;
 
 -------------
 --SEQUENCES--
 -------------
 
-CREATE SEQUENCE userID START WITH 11;
-CREATE SEQUENCE post_id START WITH 11;
-CREATE SEQUENCE profile_id START WITH 11;
-
 -------------
 ---DOMAINS---
 -------------
-
-CREATE DOMAIN _STATUS CHAR(5) CHECK (value IN ( 'TRUE' , 'FALSE') );
 
 ------------
 ---TABLES---
 ------------
 
-CREATE TABLE User(
+CREATE TABLE DBUsers(
 userID INTEGER NOT NULL,
 fullname VARCHAR(128) NOT NULL,
 username VARCHAR(64) NOT NULL,
 email VARCHAR(64) NOT NULL,
-user_password CHAR(64) NOT NULL,
+user_password VARCHAR(64) NOT NULL,
 PRIMARY KEY(username)
 );
 
@@ -41,8 +35,8 @@ date_posted DATE NOT NULL,
 num_comments INTEGER NOT NULL,
 tags VARCHAR(64) NOT NULL,
 photo_url VARCHAR(128) NOT NULL,
-PRIMARY KEY(photo_id),
-FOREIGN KEY(username_id) REFERENCES User(username)
+PRIMARY KEY(post_id),
+FOREIGN KEY(username_id) REFERENCES DBUsers(username)
 );
 
 CREATE TABLE UserProfile(
@@ -51,8 +45,8 @@ username_id VARCHAR(64) NOT NULL,
 num_posts INTEGER NOT NULL,
 followers INTEGER NOT NULL,
 followings INTEGER NOT NULL,
-follow_status _STATUS,
-FOREIGN KEY(username_id) REFERENCES User(username)
+follow_status VARCHAR(5) NOT NULL,
+FOREIGN KEY(username_id) REFERENCES DBUsers(username)
 );
 
 
@@ -60,7 +54,7 @@ FOREIGN KEY(username_id) REFERENCES User(username)
 -- INSERT DATA STATEMENTS --
 ----------------------------
 
-COPY User (
+COPY DBUsers (
 	userID,
     fullname,
     username,
@@ -68,7 +62,8 @@ COPY User (
     user_password
 )
 FROM 'users.csv'
-WITH DELIMITER ',';
+WITH DELIMITER ','
+CSV HEADER;
 
 COPY Post (
 	post_id,
@@ -80,7 +75,8 @@ COPY Post (
     photo_url
 )
 FROM 'posts.csv'
-WITH DELIMITER ',';
+WITH DELIMITER ','
+CSV HEADER;
 
 COPY UserProfile (
 	profile_id,
@@ -91,4 +87,5 @@ COPY UserProfile (
     follow_status
 )
 FROM 'profiles.csv'
-WITH DELIMITER ',';
+WITH DELIMITER ','
+CSV HEADER;

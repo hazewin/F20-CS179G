@@ -270,7 +270,7 @@ public class DBproject{
 					//case 7: ViewPhotosByTag(esql); break;
 					//case 8: ViewPhotosOfUser(esql); break;
 					//case 9: FindPassengersCountWithStatus(esql); break;
-					case 10: keepon = false; break;
+					case 14: keepon = false; break;
 				}
 			}
 		}catch(Exception e){
@@ -309,8 +309,9 @@ public class DBproject{
 
 	public static void AddPost(DBproject esql) {//2
 		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
+		int default_num = 0;
 		try{
-			String query = "INSERT INTO Posts(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
+			String query = "INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
 			String input = "";
 	 
 			System.out.print("\tEnter Post_ID: ");
@@ -320,12 +321,12 @@ public class DBproject{
 			input = in.readLine();
 			query += "'" + input + "', ";
 			/* SET DEFAULT LIKES TO ZERO */
-			query += "'" + input + "', ";			
+			query += "'" + default_num + "', ";			
 			System.out.print("\tEnter Date Posted (Ex: MM/DD/YYYY): ");
 			input = in.readLine();
 			query += "'" + input + "', ";
 			/* SET DEFAULT COMMENTS TO ZERO */
-			query += "'" + input + "', ";
+			query += "'" + default_num + "', ";
 			System.out.print("\tEnter One Tag: ");
 			input = in.readLine();
 			query += "'" + input + "', ";
@@ -344,7 +345,7 @@ public class DBproject{
 		// View all the posts in the DB
 
 		try{
-			String query = "SELECT * FROM Posts;"; 
+			String query = "SELECT * FROM Post;"; 
 			esql.executeQueryAndPrintResult(query);
 		 }catch(Exception e){
 			System.err.println (e.getMessage());
