@@ -245,17 +245,31 @@ public class DBproject{
 				System.out.println("MAIN MENU");
 				System.out.println("---------");
 				System.out.println("1. Add User");
+				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
+				System.out.println("3. View Post");
 				System.out.println("4. Follow a user");
-				System.out.println("5. Search user by username"); //view profile of user 
-				System.out.println("6. Search user by tags"); 
-				System.out.println("13. List out most popular users of the database"); 
+				System.out.println("5. Search user by username"); //view profile of user
+				System.out.println("6. Search user by tags");
+				System.out.println("7. View photos based on tags");
+				System.out.println("8. View photos based on users"); //view pictures of the user
+				System.out.println("9. View photos based on date");
+				System.out.println("10. View newsfeed of top photos");
+				System.out.println("11. View statistics of a photo");
+				System.out.println("12. List top photos of the database");
+				System.out.println("13. List out most popular users of the database");
 				System.out.println("14. < EXIT");
 				
 				switch (readChoice()){
 					case 1: AddUser(esql); break; //sandy
+					//case 2: AddPost(esql); break;
+					//case 3: ViewAllPosts(esql); break;
 					case 4: FollowUser(esql); break; // sandy
 					case 5: SearchProfileBasedOnUser(esql); break; // sandy
 					case 6: SearchProfileBasedOnTags(esql); break; // sandy
+					//case 7: ViewPhotosByTag(esql); break;
+					//case 8: ViewPhotosOfUser(esql); break;
+					//case 9: FindPassengersCountWithStatus(esql); break;
+					case 10: keepon = false; break;
 					case 13: PopularUsers(esql); break; // sandy
 					case 14: keepon = false; break;
 				}
@@ -322,6 +336,49 @@ public class DBproject{
 		}
 	}
 
+	public static void AddPost(DBproject esql) {//2
+		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
+		try{
+			String query = "INSERT INTO Posts(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
+			String input = "";
+	 
+			System.out.print("\tEnter Post_ID: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			System.out.print("\tEnter Username: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			/* SET DEFAULT LIKES TO ZERO */
+			query += "'" + input + "', ";			
+			System.out.print("\tEnter Date Posted (Ex: MM/DD/YYYY): ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			/* SET DEFAULT COMMENTS TO ZERO */
+			query += "'" + input + "', ";
+			System.out.print("\tEnter One Tag: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			System.out.print("\tEnter Photo_URL: ");
+			input = in.readLine();
+			query += "'" + input + "');";
+
+	 
+			esql.executeUpdate(query);
+		 }catch(Exception e){
+			System.err.println (e.getMessage());
+		 }
+	}
+
+	public static void ViewAllPosts(DBproject esql) {//3
+		// View all the posts in the DB
+
+		try{
+			String query = "SELECT * FROM Post;"; 
+			esql.executeQueryAndPrintResult(query);
+		 }catch(Exception e){
+			System.err.println (e.getMessage());
+		 }
+	}
 
 	public static void FollowUser(DBproject esql) {//4 sandy
 		try {
