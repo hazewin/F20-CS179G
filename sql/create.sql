@@ -51,8 +51,8 @@ FOREIGN KEY(username_id) REFERENCES DBUsers(username)
 );
 
 CREATE TABLE UserFollowing (
-  followed VARCHAR(64) REFERENCES User(username),
-  follower VARCHAR(64) REFERENCES User(username),
+  followed VARCHAR(64) REFERENCES DBUsers(username),
+  follower VARCHAR(64) REFERENCES DBUsers(username),
   PRIMARY KEY (followed, follower)
 );
 
