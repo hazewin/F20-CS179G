@@ -5,7 +5,9 @@ DROP TABLE IF EXISTS UserProfile CASCADE;
 -------------
 --SEQUENCES--
 -------------
-
+CREATE SEQUENCE userID START WITH 11;
+CREATE SEQUENCE post_id START WITH 11;
+CREATE SEQUENCE profile_id START WITH 11;
 -------------
 ---DOMAINS---
 -------------
