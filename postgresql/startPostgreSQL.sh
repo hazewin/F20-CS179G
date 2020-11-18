@@ -1,26 +1,21 @@
 #! /bin/bash
-folder=/tmp/$USER
-export PGDATA=$folder/myDB/data
-export PGSOCKETS=$folder/myDB/sockets
-
-echo $folder
-
-#Clear folder
-rm -rf $folder
+folder=/tmp/$(logname)/mydb
+PGDATA=$folder/data
+PGSOCKETS=$folder/sockets
+export PGDATA
+export PGSOCKETS
 
 #Initialize folders
-mkdir $folder
-mkdir $folder/myDB
-mkdir $folder/myDB/data
-mkdir $folder/myDB/sockets
+rm -fr $PGDATA
+rm -fr $PGSOCKETS
+mkdir -p $PGDATA
+mkdir -p $PGSOCKETS
 sleep 1
-#cp ../data/*.csv $folder/myDB/data
 
 #Initialize DB
 initdb
 
 sleep 1
 #Start folder
-export PGPORT=9999
-pg_ctl -o "-c unix_socket_directories=$PGSOCKETS -p $PGPORT" -D $PGDATA -l $folder/logfile start
+pg_ctl -o "-c unix_socket_directories=$PGSOCKETS" -D $PGDATA -l $folder/logfile start
 
