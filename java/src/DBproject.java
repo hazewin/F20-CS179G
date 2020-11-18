@@ -261,15 +261,15 @@ public class DBproject{
 				System.out.println("14. < EXIT");
 				
 				switch (readChoice()){
-					case 1: AddPlane(esql); break;
-					case 2: AddPilot(esql); break;
-					case 3: AddFlight(esql); break;
-					case 4: AddTechnician(esql); break;
-					case 5: BookFlight(esql); break;
-					case 6: ListNumberOfAvailableSeats(esql); break;
-					case 7: ViewPhotosByTag(esql); break;
-					case 8: ViewPhotosOfUser(esql); break;
-					case 9: FindPassengersCountWithStatus(esql); break;
+					//case 1: AddPlane(esql); break;
+					case 2: AddPost(esql); break;
+					case 3: ViewAllPosts(esql); break;
+					//case 4: AddTechnician(esql); break;
+					//case 5: BookFlight(esql); break;
+					//case 6: ListNumberOfAvailableSeats(esql); break;
+					//case 7: ViewPhotosByTag(esql); break;
+					//case 8: ViewPhotosOfUser(esql); break;
+					//case 9: FindPassengersCountWithStatus(esql); break;
 					case 10: keepon = false; break;
 				}
 			}
@@ -304,17 +304,54 @@ public class DBproject{
 		return input;
 	}//end readChoice
 
-	public static void AddPlane(DBproject esql) {//1
+	//public static void AddPlane(DBproject esql) {//1
+	//}
+
+	public static void AddPost(DBproject esql) {//2
+		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
+		try{
+			String query = "INSERT INTO Posts(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
+			String input = "";
+	 
+			System.out.print("\tEnter Post_ID: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			System.out.print("\tEnter Username: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			/* SET DEFAULT LIKES TO ZERO */
+			query += "'" + input + "', ";			
+			System.out.print("\tEnter Date Posted (Ex: MM/DD/YYYY): ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			/* SET DEFAULT COMMENTS TO ZERO */
+			query += "'" + input + "', ";
+			System.out.print("\tEnter One Tag: ");
+			input = in.readLine();
+			query += "'" + input + "', ";
+			System.out.print("\tEnter Photo_URL: ");
+			input = in.readLine();
+			query += "'" + input + "');";
+
+	 
+			esql.executeUpdate(query);
+		 }catch(Exception e){
+			System.err.println (e.getMessage());
+		 }
 	}
 
-	public static void AddPilot(DBproject esql) {//2
+	public static void ViewAllPosts(DBproject esql) {//3
+		// View all the posts in the DB
+
+		try{
+			String query = "SELECT * FROM Posts;"; 
+			esql.executeQueryAndPrintResult(query);
+		 }catch(Exception e){
+			System.err.println (e.getMessage());
+		 }
 	}
 
-	public static void AddFlight(DBproject esql) {//3
-		// Given a pilot, plane and flight, adds a flight in the DB
-	}
-
-	public static void AddTechnician(DBproject esql) {//4
+	/*public static void AddTechnician(DBproject esql) {//4
 	}
 
 	public static void BookFlight(DBproject esql) {//5
@@ -323,9 +360,9 @@ public class DBproject{
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//6
 		// For flight number and date, find the number of availalbe seats (i.e. total plane capacity minus booked seats )
-	}
+	}*/
 
-	public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
+	/*public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
 		// User enters a tag to search and database replies with photos containing tag
 
 		System.out.print("\nWhich hashtag would you like to see photos for? : ");
@@ -356,9 +393,9 @@ public class DBproject{
 		
 
 		
-	}
+	}*/
 	
-	public static void FindPassengersCountWithStatus(DBproject esql) {//9
+	/*public static void FindPassengersCountWithStatus(DBproject esql) {//9
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
-	}
+	}*/
 }
