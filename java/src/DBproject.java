@@ -247,7 +247,7 @@ public class DBproject{
 				System.out.println("---------");
 				System.out.println("1. Add User");
 				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
-				System.out.println("3. View Post");
+				System.out.println("3. View All Posts"); // view all the posts in the database
 				System.out.println("4. Follow a user");
 				System.out.println("5. Search user by username"); //view profile of user
 				System.out.println("6. Search user by tags");
@@ -267,7 +267,7 @@ public class DBproject{
 					//case 4: AddTechnician(esql); break;
 					//case 5: BookFlight(esql); break;
 					//case 6: ListNumberOfAvailableSeats(esql); break;
-					//case 7: ViewPhotosByTag(esql); break;
+					case 7: ViewPhotosByTag(esql); break;
 					//case 8: ViewPhotosOfUser(esql); break;
 					//case 9: FindPassengersCountWithStatus(esql); break;
 					case 14: keepon = false; break;
@@ -363,7 +363,7 @@ public class DBproject{
 		// For flight number and date, find the number of availalbe seats (i.e. total plane capacity minus booked seats )
 	}*/
 
-	/*public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
+	public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
 		// User enters a tag to search and database replies with photos containing tag
 
 		System.out.print("\nWhich hashtag would you like to see photos for? : ");
@@ -373,7 +373,7 @@ public class DBproject{
 		
 	}
 
-	public static void ViewPhotosOfUser(DBproject esql) throws IOException {// 8
+	/*public static void ViewPhotosOfUser(DBproject esql) throws IOException {// 8
 		// Enter username or user full name and get photos of them
 
 		System.out.println("1: Search by Full Name");
@@ -384,7 +384,7 @@ public class DBproject{
 		switch(readChoice()){
 			case 1: System.out.print("Enter users full name: ");
 					String fullName = in.readLine();
-					esql.executeQueryAndPrintResult("select photo_url from post where username_id = (select username from users where fullname = " + fullName + "');")
+					esql.executeQueryAndPrintResult("select photo_url from post where username_id = (select username from users where fullname = " + fullName + ");");
 			break;
 			case 2: System.out.print("Enter users username: ");
 					String username = in.readLine();
