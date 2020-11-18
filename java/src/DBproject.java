@@ -309,11 +309,11 @@ public class DBproject{
 			System.out.print("Enter new password: ");
 			user_password = toHexString(getSHA(in.readLine()));
 			
-			String sql_stmt = String.format("SELECT MAX(username_id) FROM User;");
+			String sql_stmt = String.format("SELECT MAX(userID) FROM User;");
 			username_id_inString = esql.executeQueryAndReturnResult(sql_stmt);
 			username_id = Integer.parseInt(username_id_inString) + 1;
 
-			String sql_stmt = String.format("INSERT INTO User (username_id, email, fullname, username, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, email, fullname, username, user_password);
+			String sql_stmt = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt);
 
 			System.out.println("Successfully added new user!\n");
