@@ -344,7 +344,7 @@ public class DBproject{
 		// View all the posts in the DB
 
 		try{
-			String query = "SELECT * FROM Posts;"; 
+			String query = "SELECT * FROM Post;"; 
 			esql.executeQueryAndPrintResult(query);
 		 }catch(Exception e){
 			System.err.println (e.getMessage());
