@@ -23,6 +23,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
+import java.math.BigInteger;  
+import java.nio.charset.StandardCharsets; 
+import java.security.MessageDigest;  
+import java.security.NoSuchAlgorithmException;  
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -324,11 +329,11 @@ public class DBproject{
 			user_password = toHexString(getSHA(in.readLine()));
 			
 			String sql_stmt = String.format("SELECT MAX(userID) FROM User;");
-			username_id_inString = esql.executeQueryAndReturnResult(sql_stmt);
+			username_id_inString = (esql.executeQueryAndReturnResult(sql_stmt)).toString();
 			username_id = Integer.parseInt(username_id_inString) + 1;
 
-			String sql_stmt = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
-			esql.executeUpdate(sql_stmt);
+			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
+			esql.executeUpdate(sql_stmt_2);
 
 			System.out.println("Successfully added new user!\n");
 		} catch (Exception e) {
@@ -411,7 +416,7 @@ public class DBproject{
 		}
 	}
 
-	public static void SearchUserBasedOnTags(DBproject esql) {//6 sandy
+	public static void SearchProfileBasedOnTags(DBproject esql) {//6 sandy
 		try {
 			String tag;
 
