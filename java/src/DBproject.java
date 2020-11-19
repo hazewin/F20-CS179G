@@ -418,9 +418,9 @@ public class DBproject{
 			String user_to_follow;
 			String user_follower;
 
-			System.out.print("Enter the user you want to follow");
+			System.out.print("Enter the user you want to follow: ");
 			user_to_follow = in.readLine();
-			System.out.print("Enter your username");
+			System.out.print("Enter your username: ");
 			user_follower = in.readLine();
 
 			String sql_stmt = String.format("INSERT INTO UserFollowing (followed, follower) VALUES ('%s', '%s');", user_to_follow, user_follower);
@@ -436,7 +436,7 @@ public class DBproject{
 		try {
 			String user;
 
-			System.out.print("Enter the username of the profile you want to see");
+			System.out.print("Enter the username of the profile you want to see: ");
 			user = in.readLine();
 			esql.executeQueryAndPrintResult(String.format("SELECT * FROM UserProfile WHERE username = '%s';", user));
 		} catch (Exception e) {
@@ -448,7 +448,7 @@ public class DBproject{
 		try {
 			String tag;
 
-			System.out.print("Enter the tag you want to search for");
+			System.out.print("Enter the tag you want to search for: ");
 			tag = in.readLine();
 
 			System.out.println("Here are the usernames that correspond to this tag");
@@ -460,8 +460,9 @@ public class DBproject{
 
 	public static void PopularUsers(DBproject esql) {//13 sandy
 		try {
-			System.out.println("Here are the popular users");
+			System.out.println("Here are the popular users: \n");
 			esql.executeQueryAndPrintResult(String.format("SELECT followed, COUNT(*) AS cnt FROM UserFollowing GROUP BY followed;"));
+			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
