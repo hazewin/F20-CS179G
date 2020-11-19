@@ -16,6 +16,7 @@ pg_ctl status
 
 echo "Copying csv files ... "
 sleep 1
+
 cp ./data/*.csv /tmp/$(logname)/mydb/data/
 
 echo "Initializing tables .. "

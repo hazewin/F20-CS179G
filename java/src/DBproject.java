@@ -19,11 +19,15 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
+import java.math.BigInteger;  
+import java.nio.charset.StandardCharsets; 
+import java.security.MessageDigest;  
+import java.security.NoSuchAlgorithmException;  
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -243,7 +247,7 @@ public class DBproject{
 			
 			boolean keepon = true;
 			while(keepon){
-				System.out.println("MAIN MENU");
+				System.out.println("\nMAIN MENU");
 				System.out.println("---------");
 				System.out.println("1. Add User");
 				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
@@ -258,18 +262,19 @@ public class DBproject{
 				System.out.println("11. View statistics of a photo");
 				System.out.println("12. List top photos of the database");
 				System.out.println("13. List out most popular users of the database");
-				System.out.println("14. < EXIT");
+				System.out.println("14. EXIT");
 				
 				switch (readChoice()){
-					//case 1: AddPlane(esql); break;
+					case 1: AddUser(esql); break;
 					case 2: AddPost(esql); break;
 					case 3: ViewAllPosts(esql); break;
-					//case 4: AddTechnician(esql); break;
-					//case 5: BookFlight(esql); break;
-					//case 6: ListNumberOfAvailableSeats(esql); break;
+					case 4: FollowUser(esql); break;
+					case 5: SearchProfileBasedOnUser(esql); break;
+					case 6: SearchProfileBasedOnTags(esql); break;
 					case 7: ViewPhotosByTag(esql); break;
 					case 8: ViewPhotosOfUser(esql); break;
 					//case 9: FindPassengersCountWithStatus(esql); break;
+					case 13: PopularUsers(esql); break;
 					case 14: keepon = false; break;
 				}
 			}
@@ -304,8 +309,38 @@ public class DBproject{
 		return input;
 	}//end readChoice
 
-	//public static void AddPlane(DBproject esql) {//1
-	//}
+	public static void AddUser(DBproject esql) {//1 sandy
+		try {
+			int user_id;
+			String user_id_inString;
+			String fullname;
+			String username;
+			String email;
+			String user_password;
+
+			System.out.print("Enter email address: ");
+			email = in.readLine();
+			System.out.print("Enter a username: ");
+			username = in.readLine();
+			System.out.print("Enter a user ID: ");
+			user_id_inString = in.readLine();
+			System.out.print("Enter your full name: ");
+			fullname = in.readLine();
+			System.out.print("Enter new password: ");
+			user_password = in.readLine();
+			
+			user_id = Integer.parseInt(user_id_inString);
+
+			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d','%s', '%s', '%s', '%s');", user_id, fullname, username, email, user_password);
+			esql.executeUpdate(sql_stmt_2);
+			String sql_stmt_3 = String.format("INSERT INTO UserProfile (profile_id, username_id, num_posts, followers, followings, follow_status) VALUES ('%d','%s', '%d', '%d', '%d', '%s');", user_id, username, 0, 0, 0, "TRUE");
+			esql.executeUpdate(sql_stmt_3);
+
+			System.out.println("Successfully added new user!\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
 
 	public static void AddPost(DBproject esql) {//2
 		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
@@ -352,16 +387,49 @@ public class DBproject{
 		 }
 	}
 
-	/*public static void AddTechnician(DBproject esql) {//4
+	public static void FollowUser(DBproject esql) {//4 need to update follower number on user profile
+		try {
+			String user_being_followed;
+			String user_follower;
+
+			System.out.print("Enter the user you want to follow: ");
+			user_follower = in.readLine();
+			System.out.print("Enter your username: ");
+			user_being_followed = in.readLine();
+
+			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_follower, user_being_followed);
+			esql.executeUpdate(sql_stmt);
+
+			System.out.println("Successfully added new follower!\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
 	}
 
-	public static void BookFlight(DBproject esql) {//5
-		// Given a customer and a flight that he/she wants to book, add a reservation to the DB
+	public static void SearchProfileBasedOnUser(DBproject esql) { //5
+		try {
+			String user;
+
+			System.out.print("Enter the username of the profile you want to see: ");
+			user = in.readLine();
+			esql.executeQueryAndPrintResult(String.format("SELECT * FROM UserProfile WHERE username_id = '%s';", user));
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
 	}
 
-	public static void ListNumberOfAvailableSeats(DBproject esql) {//6
-		// For flight number and date, find the number of availalbe seats (i.e. total plane capacity minus booked seats )
-	}*/
+	public static void SearchProfileBasedOnTags(DBproject esql) { //6
+		try {
+			String tag;
+			System.out.print("Enter the tag you want to search for: ");
+			tag = in.readLine();
+
+			System.out.println("Here are the usernames that correspond to this tag");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Post WHERE tags = '%s';", tag));
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
 
 	public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
 		// User enters a tag to search and database replies with photos containing tag
@@ -410,4 +478,14 @@ public class DBproject{
 	/*public static void FindPassengersCountWithStatus(DBproject esql) {//9
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
 	}*/
+
+	public static void PopularUsers(DBproject esql) {//13 
+		try {
+			System.out.println("Here are the popular users: \n");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC;"));
+			System.out.print("\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
 }
