@@ -435,7 +435,7 @@ public class DBproject{
 	public static void PopularUsers(DBproject esql) {//13 sandy
 		try {
 			System.out.println("Here are the popular users: \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY DESC;"));
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC;"));
 			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
