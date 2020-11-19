@@ -16,8 +16,9 @@ pg_ctl status
 
 echo "Copying csv files ... "
 sleep 1
-cp data/*.csv /tmp/$(logname)/mydb/data/
+
+cp ./data/*.csv /tmp/$(logname)/mydb/data/
 
 echo "Initializing tables .. "
 sleep 1
-psql -h localhost $dbname < sql/create.sql
+psql -h localhost $dbname < ./sql/create.sql

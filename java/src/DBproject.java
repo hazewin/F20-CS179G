@@ -421,7 +421,6 @@ public class DBproject{
 	public static void SearchProfileBasedOnTags(DBproject esql) { //6
 		try {
 			String tag;
-
 			System.out.print("Enter the tag you want to search for: ");
 			tag = in.readLine();
 
