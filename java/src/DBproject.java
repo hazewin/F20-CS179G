@@ -328,7 +328,7 @@ public class DBproject{
 			System.out.print("Enter your full name: ");
 			fullname = in.readLine();
 			System.out.print("Enter new password: ");
-			user_password = in.readLine
+			user_password = in.readLine();
 			
 			user_id = Integer.parseInt(user_id_inString);
 
