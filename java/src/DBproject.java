@@ -249,20 +249,20 @@ public class DBproject{
 			while(keepon){
 				System.out.println("MAIN MENU");
 				System.out.println("---------");
-				System.out.println("1. Add User");
+				System.out.println("1. Add User SANDY");
 				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
 				System.out.println("3. View Post");
-				System.out.println("4. Follow a user");
-				System.out.println("5. Search user by username"); //view profile of user
-				System.out.println("6. Search user by tags");
+				System.out.println("4. Follow a user SANDY");
+				System.out.println("5. Search user by username SANDY"); //view profile of user
+				System.out.println("6. Search user by tags SANDY");
 				System.out.println("7. View photos based on tags");
 				System.out.println("8. View photos based on users"); //view pictures of the user
 				System.out.println("9. View photos based on date");
 				System.out.println("10. View newsfeed of top photos");
 				System.out.println("11. View statistics of a photo");
 				System.out.println("12. List top photos of the database");
-				System.out.println("13. List out most popular users of the database");
-				System.out.println("14. < EXIT");
+				System.out.println("13. List out most popular users of the database SANDY");
+				System.out.println("14. EXIT");
 				
 				switch (readChoice()){
 					case 1: AddUser(esql); break; //sandy
@@ -274,7 +274,7 @@ public class DBproject{
 					//case 7: ViewPhotosByTag(esql); break;
 					//case 8: ViewPhotosOfUser(esql); break;
 					//case 9: FindPassengersCountWithStatus(esql); break;
-					case 10: keepon = false; break;
+					//case 10: keepon = false; break;
 					case 13: PopularUsers(esql); break; // sandy
 					case 14: keepon = false; break;
 				}
@@ -310,34 +310,6 @@ public class DBproject{
 		return input;
 	}//end readChoice
 
-	public static byte[] getSHA(String input) throws NoSuchAlgorithmException 
-    {  
-        // Static getInstance method is called with hashing SHA  
-        MessageDigest md = MessageDigest.getInstance("SHA-256");  
-  
-        // digest() method called  
-        // to calculate message digest of an input  
-        // and return array of byte 
-        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
-    } 
-    
-    public static String toHexString(byte[] hash) 
-    { 
-        // Convert byte array into signum representation  
-        BigInteger number = new BigInteger(1, hash);  
-  
-        // Convert message digest into hex value  
-        StringBuilder hexString = new StringBuilder(number.toString(16));  
-  
-        // Pad with leading zeros 
-        while (hexString.length() < 32)  
-        {  
-            hexString.insert(0, '0');  
-        }  
-  
-        return hexString.toString();  
-    }
-
 	public static void AddUser(DBproject esql) {//1 sandy
 		try {
 			int username_id;
@@ -354,9 +326,9 @@ public class DBproject{
 			System.out.print("Enter your full name: ");
 			fullname = in.readLine();
 			System.out.print("Enter new password: ");
-			user_password = toHexString(getSHA(in.readLine()));
+			user_password = in.readLine();
 			
-			String sql_stmt = String.format("SELECT MAX(userID) FROM User;");
+			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
 			username_id_inString = (esql.executeQueryAndReturnResult(sql_stmt)).toString();
 			username_id = Integer.parseInt(username_id_inString) + 1;
 
@@ -438,7 +410,7 @@ public class DBproject{
 
 			System.out.print("Enter the username of the profile you want to see: ");
 			user = in.readLine();
-			esql.executeQueryAndPrintResult(String.format("SELECT * FROM UserProfile WHERE username = '%s';", user));
+			esql.executeQueryAndPrintResult(String.format("SELECT * FROM UserProfile WHERE username_id = '%s';", user));
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -452,7 +424,7 @@ public class DBproject{
 			tag = in.readLine();
 
 			System.out.println("Here are the usernames that correspond to this tag");
-			esql.executeQueryAndPrintResult(String.format("SELECT username FROM Posts WHERE tags = '%s';", tag));
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Posts WHERE tags = '%s';", tag));
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
