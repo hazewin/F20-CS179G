@@ -247,21 +247,21 @@ public class DBproject{
 			
 			boolean keepon = true;
 			while(keepon){
-				System.out.println("MAIN MENU");
+				System.out.println("\nMAIN MENU");
 				System.out.println("---------");
-				System.out.println("1. Add User SANDY");
+				System.out.println("1. Add User");
 				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
 				System.out.println("3. View Post");
-				System.out.println("4. Follow a user SANDY");
-				System.out.println("5. Search user by username SANDY"); //view profile of user
-				System.out.println("6. Search user by tags SANDY");
+				System.out.println("4. Follow a user");
+				System.out.println("5. Search user by username"); //view profile of user
+				System.out.println("6. Search user by tags");
 				System.out.println("7. View photos based on tags");
 				System.out.println("8. View photos based on users"); //view pictures of the user
 				System.out.println("9. View photos based on date");
 				System.out.println("10. View newsfeed of top photos");
 				System.out.println("11. View statistics of a photo");
 				System.out.println("12. List top photos of the database");
-				System.out.println("13. List out most popular users of the database SANDY");
+				System.out.println("13. List out most popular users of the database");
 				System.out.println("14. EXIT");
 				
 				switch (readChoice()){
@@ -313,7 +313,7 @@ public class DBproject{
 	public static void AddUser(DBproject esql) {//1 sandy
 		try {
 			int username_id;
-			String username_id_inString;
+			int username_id_inString;
 			String fullname;
 			String username;
 			String email;
@@ -328,9 +328,10 @@ public class DBproject{
 			System.out.print("Enter new password: ");
 			user_password = in.readLine();
 			
-			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
-			username_id_inString = (esql.executeUpdate(sql_stmt)).toString();
-			username_id = Integer.parseInt(username_id_inString) + 1;
+			String sql_stmt = String.format("SELECT COUNT(*) FROM DBUsers;");
+			username_id_inString = esql.executeQueryAndPrintResult(sql_stmt);
+			username_id = username_id_inString + 1;
+			//username_id = Integer.parseInt(username_id_inString) + 1;
 
 			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt_2);
