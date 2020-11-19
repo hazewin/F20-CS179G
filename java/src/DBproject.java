@@ -251,7 +251,7 @@ public class DBproject{
 				System.out.println("---------");
 				System.out.println("1. Add User");
 				System.out.println("2. Add Post"); //in this one, you ask what user you want to add a post for, then add the post
-				System.out.println("3. View Post");
+				System.out.println("3. View All Posts"); // view all the posts in the database
 				System.out.println("4. Follow a user");
 				System.out.println("5. Search user by username"); //view profile of user
 				System.out.println("6. Search user by tags");
@@ -265,17 +265,16 @@ public class DBproject{
 				System.out.println("14. EXIT");
 				
 				switch (readChoice()){
-					case 1: AddUser(esql); break; //sandy
-					//case 2: AddPost(esql); break;
-					//case 3: ViewAllPosts(esql); break;
-					case 4: FollowUser(esql); break; // sandy
-					case 5: SearchProfileBasedOnUser(esql); break; // sandy
-					case 6: SearchProfileBasedOnTags(esql); break; // sandy
-					//case 7: ViewPhotosByTag(esql); break;
-					//case 8: ViewPhotosOfUser(esql); break;
+					case 1: AddUser(esql); break;
+					case 2: AddPost(esql); break;
+					case 3: ViewAllPosts(esql); break;
+					case 4: FollowUser(esql); break;
+					case 5: SearchProfileBasedOnUser(esql); break;
+					case 6: SearchProfileBasedOnTags(esql); break;
+					case 7: ViewPhotosByTag(esql); break;
+					case 8: ViewPhotosOfUser(esql); break;
 					//case 9: FindPassengersCountWithStatus(esql); break;
-					//case 10: keepon = false; break;
-					case 13: PopularUsers(esql); break; // sandy
+					case 13: PopularUsers(esql); break;
 					case 14: keepon = false; break;
 				}
 			}
@@ -345,8 +344,9 @@ public class DBproject{
 
 	public static void AddPost(DBproject esql) {//2
 		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
+		int default_num = 0;
 		try{
-			String query = "INSERT INTO Posts(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
+			String query = "INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
 			String input = "";
 	 
 			System.out.print("\tEnter Post_ID: ");
@@ -356,12 +356,12 @@ public class DBproject{
 			input = in.readLine();
 			query += "'" + input + "', ";
 			/* SET DEFAULT LIKES TO ZERO */
-			query += "'" + input + "', ";			
+			query += "'" + default_num + "', ";			
 			System.out.print("\tEnter Date Posted (Ex: MM/DD/YYYY): ");
 			input = in.readLine();
 			query += "'" + input + "', ";
 			/* SET DEFAULT COMMENTS TO ZERO */
-			query += "'" + input + "', ";
+			query += "'" + default_num + "', ";
 			System.out.print("\tEnter One Tag: ");
 			input = in.readLine();
 			query += "'" + input + "', ";
@@ -406,7 +406,7 @@ public class DBproject{
 		}
 	}
 
-	public static void SearchProfileBasedOnUser(DBproject esql) {//5 sandy
+	public static void SearchProfileBasedOnUser(DBproject esql) { //5
 		try {
 			String user;
 
@@ -418,7 +418,7 @@ public class DBproject{
 		}
 	}
 
-	public static void SearchProfileBasedOnTags(DBproject esql) {//6 sandy
+	public static void SearchProfileBasedOnTags(DBproject esql) { //6
 		try {
 			String tag;
 
@@ -432,7 +432,55 @@ public class DBproject{
 		}
 	}
 
-	public static void PopularUsers(DBproject esql) {//13 sandy
+	public static void ViewPhotosByTag(DBproject esql) throws IOException, SQLException {// 7
+		// User enters a tag to search and database replies with photos containing tag
+
+		//Print message to get input from user and input fullname
+		System.out.print("\nWhich hashtag would you like to see photos for? : ");
+		String hashtag = in.readLine();
+
+		//Executes quesry and prints the result
+		esql.executeQueryAndPrintResult("select photo_url from post where tags = '#" + hashtag + "'");
+		
+	}
+
+	public static void ViewPhotosOfUser(DBproject esql) throws IOException, SQLException {// 8
+		// Enter username or user full name and get photos of them
+
+		//Print menu so user can search for a User bases on their full name or their username
+		System.out.println("\n");
+		System.out.println("1: Search by Full Name");
+		System.out.println("2: Search by username");
+		System.out.println("----------------------");
+		 
+
+		switch(readChoice()){
+			// asks user to enter full name to search for and reads in input
+			case 1: System.out.print("Enter users full name: ");
+					String fullName = in.readLine();
+					System.out.println("");
+					
+					//executes sql query
+					esql.executeQueryAndPrintResult("select photo_url from post where username_id = (select username from DBusers where fullname = '" + fullName + "');");
+			break;
+			// asks user to enter username to search for and reads in input
+			case 2: System.out.print("Enter users username: ");
+					String username = in.readLine();
+					System.out.println("");
+
+					// executes sql statement and prints result
+					esql.executeQueryAndPrintResult("select photo_url from post where username_id = '" + username + "';");
+					break;
+		}
+		// prints extra line for formatting	
+		System.out.println("");		
+	}
+	
+	/*public static void FindPassengersCountWithStatus(DBproject esql) {//9
+		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
+	}*/
+
+	public static void PopularUsers(DBproject esql) {//13 
 		try {
 			System.out.println("Here are the popular users: \n");
 			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC;"));
