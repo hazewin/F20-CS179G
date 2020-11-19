@@ -334,10 +334,10 @@ public class DBproject{
 
 			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d','%s', '%s', '%s', '%s');", user_id, fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt_2);
+			String sql_stmt_3 = String.format("INSERT INTO UserProfile (profile_id, username_id, num_posts, followers, followings, follow_status) VALUES ('%d','%s', '%d', '%d', '%d', '%s');", user_id, username, 0, 0, 0, "TRUE");
+			esql.executeUpdate(sql_stmt_3);
 
 			System.out.println("Successfully added new user!\n");
-			String sql_3 = String.format("SELECT * FROM DBUsers;");
-			esql.executeQueryAndPrintResult(sql_3);
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -387,7 +387,7 @@ public class DBproject{
 		 }
 	}
 
-	public static void FollowUser(DBproject esql) {//4 sandy
+	public static void FollowUser(DBproject esql) {//4 need to update follower number on user profile
 		try {
 			String user_being_followed;
 			String user_follower;
