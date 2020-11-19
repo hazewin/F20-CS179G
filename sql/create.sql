@@ -51,9 +51,9 @@ FOREIGN KEY(username_id) REFERENCES DBUsers(username)
 );
 
 CREATE TABLE UserFollowing (
-  followed VARCHAR(64) REFERENCES DBUsers(username),
+  username_id VARCHAR(64) REFERENCES DBUsers(username),
   follower VARCHAR(64) REFERENCES DBUsers(username),
-  PRIMARY KEY (followed, follower)
+  PRIMARY KEY (username_id, follower)
 );
 
 CREATE INDEX follower_idx ON UserFollowing(follower);
@@ -99,7 +99,7 @@ WITH DELIMITER ','
 CSV HEADER;
 
 COPY UserFollowing (
-	followed,
+	username_id,
     follower
 )
 FROM 'followings.csv'

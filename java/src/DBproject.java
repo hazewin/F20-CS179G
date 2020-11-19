@@ -329,7 +329,7 @@ public class DBproject{
 			user_password = in.readLine();
 			
 			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
-			username_id_inString = (esql.executeQueryAndReturnResult(sql_stmt)).toString();
+			username_id_inString = (esql.executeUpdate(sql_stmt)).toString();
 			username_id = Integer.parseInt(username_id_inString) + 1;
 
 			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
@@ -387,15 +387,15 @@ public class DBproject{
 
 	public static void FollowUser(DBproject esql) {//4 sandy
 		try {
-			String user_to_follow;
+			String user_being_followed;
 			String user_follower;
 
 			System.out.print("Enter the user you want to follow: ");
-			user_to_follow = in.readLine();
-			System.out.print("Enter your username: ");
 			user_follower = in.readLine();
+			System.out.print("Enter your username: ");
+			user_being_followed = in.readLine();
 
-			String sql_stmt = String.format("INSERT INTO UserFollowing (followed, follower) VALUES ('%s', '%s');", user_to_follow, user_follower);
+			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_being_followed, user_follower);
 			esql.executeUpdate(sql_stmt);
 
 			System.out.println("Successfully added new follower!\n");
@@ -424,7 +424,7 @@ public class DBproject{
 			tag = in.readLine();
 
 			System.out.println("Here are the usernames that correspond to this tag");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Posts WHERE tags = '%s';", tag));
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Post WHERE tags = '%s';", tag));
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -433,7 +433,7 @@ public class DBproject{
 	public static void PopularUsers(DBproject esql) {//13 sandy
 		try {
 			System.out.println("Here are the popular users: \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT followed, COUNT(*) AS cnt FROM UserFollowing GROUP BY followed;"));
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id;"));
 			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
