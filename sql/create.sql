@@ -6,7 +6,9 @@ DROP TABLE IF EXISTS UserFollowing CASCADE;
 -------------
 --SEQUENCES--
 -------------
-
+CREATE SEQUENCE userID START WITH 11;
+CREATE SEQUENCE post_id START WITH 11;
+CREATE SEQUENCE profile_id START WITH 11;
 -------------
 ---DOMAINS---
 -------------

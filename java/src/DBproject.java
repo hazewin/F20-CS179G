@@ -312,8 +312,8 @@ public class DBproject{
 
 	public static void AddUser(DBproject esql) {//1 sandy
 		try {
-			//int user_id;
-			//int username_id_in_rs;
+			int user_id;
+			String user_id_inString;
 			String fullname;
 			String username;
 			String email;
@@ -323,20 +323,16 @@ public class DBproject{
 			email = in.readLine();
 			System.out.print("Enter a username: ");
 			username = in.readLine();
+			System.out.print("Enter a user ID: ");
+			user_id_inString = in.readLine();
 			System.out.print("Enter your full name: ");
 			fullname = in.readLine();
 			System.out.print("Enter new password: ");
-			user_password = in.readLine();
+			user_password = in.readLine
 			
-			//String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
-			//int rs = esql.executeQuery(sql_stmt);
-			//while(rs.next()){
-			//	username_id_in_rs = rs.getInt("userID");
-			//}
-			//username_id = rs + 1;
-			//username_id = Integer.parseInt(username_id_inString) + 1;
+			user_id = Integer.parseInt(user_id_inString);
 
-			String sql_stmt_2 = String.format("INSERT INTO DBUsers (fullname, username, email, user_password) VALUES ('%s', '%s', '%s', '%s');", fullname, username, email, user_password);
+			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d','%s', '%s', '%s', '%s');", user_id, fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt_2);
 
 			System.out.println("Successfully added new user!\n");
