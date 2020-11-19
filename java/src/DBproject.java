@@ -313,7 +313,7 @@ public class DBproject{
 	public static void AddUser(DBproject esql) {//1 sandy
 		try {
 			int username_id;
-			int username_id_inString;
+			//int username_id_in_rs;
 			String fullname;
 			String username;
 			String email;
@@ -329,14 +329,19 @@ public class DBproject{
 			user_password = in.readLine();
 			
 			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
-			username_id_inString = esql.executeQueryAndPrintResult(sql_stmt);
-			username_id = username_id_inString + 1;
+			int rs = esql.executeQuery(sql_stmt);
+			//while(rs.next()){
+			//	username_id_in_rs = rs.getInt("userID");
+			//}
+			username_id = rs + 1;
 			//username_id = Integer.parseInt(username_id_inString) + 1;
 
 			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt_2);
 
 			System.out.println("Successfully added new user!\n");
+			String sql_3 = String.format("SELECT * FROM DBUsers;");
+			esql.executeQueryAndPrintResult(sql_3);
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -396,7 +401,7 @@ public class DBproject{
 			System.out.print("Enter your username: ");
 			user_being_followed = in.readLine();
 
-			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_being_followed, user_follower);
+			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_follower, user_being_followed);
 			esql.executeUpdate(sql_stmt);
 
 			System.out.println("Successfully added new follower!\n");
