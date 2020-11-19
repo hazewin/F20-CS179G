@@ -328,7 +328,7 @@ public class DBproject{
 			System.out.print("Enter new password: ");
 			user_password = in.readLine();
 			
-			String sql_stmt = String.format("SELECT COUNT(*) FROM DBUsers;");
+			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
 			username_id_inString = esql.executeQueryAndPrintResult(sql_stmt);
 			username_id = username_id_inString + 1;
 			//username_id = Integer.parseInt(username_id_inString) + 1;
