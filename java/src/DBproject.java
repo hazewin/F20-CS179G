@@ -312,7 +312,7 @@ public class DBproject{
 
 	public static void AddUser(DBproject esql) {//1 sandy
 		try {
-			int username_id;
+			//int user_id;
 			//int username_id_in_rs;
 			String fullname;
 			String username;
@@ -328,15 +328,15 @@ public class DBproject{
 			System.out.print("Enter new password: ");
 			user_password = in.readLine();
 			
-			String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
-			int rs = esql.executeQuery(sql_stmt);
+			//String sql_stmt = String.format("SELECT MAX(userID) FROM DBUsers;");
+			//int rs = esql.executeQuery(sql_stmt);
 			//while(rs.next()){
 			//	username_id_in_rs = rs.getInt("userID");
 			//}
-			username_id = rs + 1;
+			//username_id = rs + 1;
 			//username_id = Integer.parseInt(username_id_inString) + 1;
 
-			String sql_stmt_2 = String.format("INSERT INTO DBUsers (userID, fullname, username, email, user_password) VALUES ('%d', '%s', '%s', '%s', '%s');", username_id, fullname, username, email, user_password);
+			String sql_stmt_2 = String.format("INSERT INTO DBUsers (fullname, username, email, user_password) VALUES ('%s', '%s', '%s', '%s');", fullname, username, email, user_password);
 			esql.executeUpdate(sql_stmt_2);
 
 			System.out.println("Successfully added new user!\n");
@@ -439,7 +439,7 @@ public class DBproject{
 	public static void PopularUsers(DBproject esql) {//13 sandy
 		try {
 			System.out.println("Here are the popular users: \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id;"));
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY DESC;"));
 			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
