@@ -1,8 +1,3 @@
-#!/bin/bash
-root=$(realpath $(dirname "$0"))
-root=$(dirname $root)
-
-cd $root/java
-
+#! /bin/bash
 rm -rf bin/*.class
 javac -cp ".;lib/postgresql-42.1.4.jar;" src/DBproject.java -d bin/
