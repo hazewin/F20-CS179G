@@ -1,5 +1,5 @@
 #! /bin/bash
-DBNAME=$(logname)_db
+DBNAME=$USER"_DB"
 PORT=$PGPORT
 
 # Example: source ./run.sh flightDB 5432 user
