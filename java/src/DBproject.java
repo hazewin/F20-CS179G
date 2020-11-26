@@ -280,7 +280,7 @@ public class DBproject{
 					//case 11: 
 					//case 12:
 					case 13: PopularUsers(esql); break;
-					//case 14:
+					case 14: TagAUser(esql); break;
 					//case 15:
 					case 16: keepon = false; break;
 				}
@@ -504,6 +504,26 @@ public class DBproject{
 			System.out.println("Here are the popular users: \n");
 			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC;"));
 			System.out.print("\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
+	public static void TagAUser(DBproject esql) {//14
+		try {
+			String post_id_string;
+			int post_id;
+			String taggeduser;
+
+			System.out.print("Enter the id of the post to tag: ");
+			post_id_string = in.readLine();
+			System.out.print("Enter the user you want to tag: ");
+			taggeduser = in.readLine();
+			post_id = Integer.parseInt(post_id_string);
+
+			String sql_stmt = String.format("INSERT INTO UserTagged (pid, taggeduser) VALUES ('%s', '%d');", taggeduser, post_id);
+			esql.executeUpdate(sql_stmt);
+
+			System.out.println("Successfully added new tag!\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}

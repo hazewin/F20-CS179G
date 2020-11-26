@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS DBUsers CASCADE;
 DROP TABLE IF EXISTS Post CASCADE;
 DROP TABLE IF EXISTS UserProfile CASCADE;
 DROP TABLE IF EXISTS UserFollowing CASCADE;
+DROP TABLE IF EXISTS UserTagged CASCADE;
 
 -------------
 --SEQUENCES--
@@ -60,6 +61,13 @@ CREATE TABLE UserFollowing (
 
 CREATE INDEX follower_idx ON UserFollowing(follower);
 
+CREATE TABLE UserTagged (
+pid INTEGER REFERENCES Post(post_id),
+tagged VARCHAR(64) REFERENCES DBUsers(username),
+PRIMARY KEY (pid, tagged)
+);
+
+CREATE INDEX tagged_idx ON UserTagged(tagged);
 ----------------------------
 -- INSERT DATA STATEMENTS --
 ----------------------------
@@ -105,5 +113,13 @@ COPY UserFollowing (
     follower
 )
 FROM 'followings.csv'
+WITH DELIMITER ','
+CSV HEADER;
+
+COPY UserTagged (
+	pid,
+     tagged
+)
+FROM 'taggedusers.csv'
 WITH DELIMITER ','
 CSV HEADER;
