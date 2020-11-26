@@ -520,9 +520,13 @@ public class DBproject{
 			taggeduser = in.readLine();
 			post_id = Integer.parseInt(post_id_string);
 
-			String sql_stmt = String.format("INSERT INTO UserTagged (pid, taggeduser) VALUES ('%s', '%d');", taggeduser, post_id);
+			String sql_stmt = String.format("INSERT INTO UserTagged (pid, tagged) VALUES ('%d', '%s');", post_id, taggeduser);
 			esql.executeUpdate(sql_stmt);
-
+			
+			//System.out.println("Here is the list of users tagged in this post\n");
+			//String sql_stmt1 = String.format("SELECT tagged FROM UserTagged WHERE pid = '%d';", post_id);
+			//esql.executeUpdate(sql_stmt1);
+			
 			System.out.println("Successfully added new tag!\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
