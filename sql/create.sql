@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS DBUsers CASCADE;
 DROP TABLE IF EXISTS Post CASCADE;
 DROP TABLE IF EXISTS UserProfile CASCADE;
 DROP TABLE IF EXISTS UserFollowing CASCADE;
+DROP TABLE IF EXISTS PostComment CASCADE;
+
 
 -------------
 --SEQUENCES--
@@ -58,7 +60,15 @@ CREATE TABLE UserFollowing (
   PRIMARY KEY (username_id, follower)
 );
 
+CREATE TABLE PostComment (
+  username_id VARCHAR(64) REFERENCES DBUsers(username),
+  comment VARCHAR(64) NOT NULL,
+  PRIMARY KEY (username_id, comment)
+);
+
 CREATE INDEX follower_idx ON UserFollowing(follower);
+
+CREATE INDEX comment_idx ON PostComment(comment);
 
 ----------------------------
 -- INSERT DATA STATEMENTS --
@@ -105,5 +115,13 @@ COPY UserFollowing (
     follower
 )
 FROM 'followings.csv'
+WITH DELIMITER ','
+CSV HEADER;
+
+COPY PostComment (
+	username_id,
+    comment
+)
+FROM 'comments.csv'
 WITH DELIMITER ','
 CSV HEADER;
