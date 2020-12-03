@@ -256,10 +256,10 @@ public class DBproject{
 				System.out.println("4. Follow a user");
 				System.out.println("5. Search user by username"); //view profile of user
 				System.out.println("6. Search user by tags");
-				System.out.println("7. View photos based on tags");
+				System.out.println("7. View photos based on tags"); //view pictues based on tags
 				System.out.println("8. View photos based on users"); //view pictures of the user
-				System.out.println("9. View photos based on date");
-				System.out.println("10. View newsfeed of top photos");
+				System.out.println("9. View photos based on date"); //view posts based on date
+				System.out.println("10. View newsfeed of top photos"); //view news feed of who username is following
 				System.out.println("11. View statistics of a photo");
 				System.out.println("12. List top photos of the database");
 				System.out.println("13. List out most popular users of the database");
@@ -276,12 +276,12 @@ public class DBproject{
 					case 6: SearchProfileBasedOnTags(esql); break;
 					case 7: ViewPhotosByTag(esql); break;
 					case 8: ViewPhotosOfUser(esql); break;
-					//case 9: 
-					//case 10:
+          case 9: ViewPhotosOnDate(esql); break;
+					case 10: ViewNewsFeedOfFollowing(esql); break;
 					case 11: ViewStatistics(esql); break;
 					case 12: PopularPhotos(esql); break;
 					case 13: PopularUsers(esql); break;
-					//case 14: 
+					case 14: TagAUser(esql); break;
 					case 15: CommentPost(esql); break;
 					case 16: keepon = false; break;
 					default : System.out.println("Unrecognized choice! Try again."); break;
@@ -509,9 +509,46 @@ public class DBproject{
 			
 	}
 	
-	/*public static void FindPassengersCountWithStatus(DBproject esql) {//9
-		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
-	}*/
+	public static void ViewPhotosOnDate(DBproject esql) {//9
+		// view photos based on date user enters
+		try{
+			//Prompts user to enter a date and reads in their input
+			System.out.print("Enter date to view posted photos(YYYY-MM-DD): ");
+			String date = in.readLine();
+			System.out.println("");
+
+			//Executes sequal statement to get posts from date
+			esql.executeQueryAndPrintResult("select * from post where date_posted = '" + date + "';");
+		} catch (Exception e) {
+			//Catches exception and prints error message
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
+
+	public static void ViewNewsFeedOfFollowing(DBproject esql) {
+		// Enter a username and view a news feed of who they are following 
+		try{
+			//Asks for username to view newsfeed of
+			System.out.print("Enter a users full name to view their newsfeed: ");
+			String fullName = in.readLine();
+
+			//executes sql statement that returns a list of people user is following
+			List<List<String>> result = esql.executeQueryAndReturnResult("select follower from UserFollowing where username_id = (select username from DBUsers where fullname = '" + fullName + "');");
+			
+			//checks to see if list of people following is not empty
+			if(result != null && !result.isEmpty() ){
+				//loops through list of people following and outputs their posts
+				for(int i = 0; i < result.size(); i++){
+					esql.executeQueryAndPrintResult("select * from post where username_id = '" + result.get(i).get(0) + "';");
+					System.out.println("");
+				}
+			}
+		//catches exception
+		}catch (Exception e){
+			System.out.println(e.getMessage() + "\n");
+		}
+	
+	}
 
 
 	public static void ViewStatistics(DBproject esql) {//11 
@@ -567,5 +604,30 @@ public class DBproject{
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}	
+
+	public static void TagAUser(DBproject esql) {//14
+		try {
+			String post_id_string;
+			int post_id;
+			String taggeduser;
+
+			System.out.print("Enter the id of the post to tag: ");
+			post_id_string = in.readLine();
+			System.out.print("Enter the user you want to tag: ");
+			taggeduser = in.readLine();
+			post_id = Integer.parseInt(post_id_string);
+
+			String sql_stmt = String.format("INSERT INTO UserTagged (pid, tagged) VALUES ('%d', '%s');", post_id, taggeduser);
+			esql.executeUpdate(sql_stmt);
+			
+			//System.out.println("Here is the list of users tagged in this post\n");
+			//String sql_stmt1 = String.format("SELECT tagged FROM UserTagged WHERE pid = '%d';", post_id);
+			//esql.executeUpdate(sql_stmt1);
+			
+			System.out.println("Successfully added new tag!\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+
 	}
 }
