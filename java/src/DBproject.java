@@ -246,6 +246,7 @@ public class DBproject{
 			esql = new DBproject (dbname, dbport, user, "");
 			
 			boolean keepon = true;
+			Greeting();
 			while(keepon){
 				System.out.println("\nMAIN MENU");
 				System.out.println("---------");
@@ -275,14 +276,15 @@ public class DBproject{
 					case 6: SearchProfileBasedOnTags(esql); break;
 					case 7: ViewPhotosByTag(esql); break;
 					case 8: ViewPhotosOfUser(esql); break;
-					case 9: ViewPhotosOnDate(esql); break;
+          case 9: ViewPhotosOnDate(esql); break;
 					case 10: ViewNewsFeedOfFollowing(esql); break;
-					//case 11: 
-					//case 12:
+					case 11: ViewStatistics(esql); break;
+					case 12: PopularPhotos(esql); break;
 					case 13: PopularUsers(esql); break;
 					case 14: TagAUser(esql); break;
-					//case 15:
+					case 15: CommentPost(esql); break;
 					case 16: keepon = false; break;
+					default : System.out.println("Unrecognized choice! Try again."); break;
 				}
 			}
 		}catch(Exception e){
@@ -292,12 +294,26 @@ public class DBproject{
 				if(esql != null) {
 					System.out.print("Disconnecting from database...");
 					esql.cleanup ();
-					System.out.println("Done\n\nBye !");
+					Done();
 				}//end if				
 			}catch(Exception e){
 				// ignored.
 			}
 		}
+	}
+
+	public static void Greeting(){
+		System.out.println(
+			   "\n\n*******************************************************\n" +
+			   "               Welcome to Instagram 2.0      	               \n" +
+			   "*******************************************************\n");
+   }//end Greeting
+
+   public static void Done(){
+	System.out.println(
+		   "\n\n*******************************************************\n" +
+		   "            Thank You For Using Our Application!    	               \n" +
+		   "*******************************************************\n");
 	}
 
 	public static int readChoice() {
@@ -378,7 +394,7 @@ public class DBproject{
 
 	 
 			esql.executeUpdate(query);
-			System.out.println("\n\t\t\tSuccessfully added a new post!\n");
+			System.out.println("\n\tSuccessfully added a new post!\n");
 		 }catch(Exception e){
 			System.err.println (e.getMessage());
 		 }
@@ -388,6 +404,7 @@ public class DBproject{
 		// View all the posts in the DB
 
 		try{
+			System.out.println("Here are all the posts! \n");
 			String query = "SELECT * FROM Post;"; 
 			esql.executeQueryAndPrintResult(query);
 		 }catch(Exception e){
@@ -452,9 +469,6 @@ public class DBproject{
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
-		
-		
-		
 	}
 
 	public static void ViewPhotosOfUser(DBproject esql) {// 8
@@ -463,8 +477,8 @@ public class DBproject{
 		//Print menu so user can search for a User bases on their full name or their username
 		try{
 			System.out.println("\n");
-			System.out.println("1: Search by Full Name");
-			System.out.println("2: Search by username");
+			System.out.println("\t1: Search by Full Name");
+			System.out.println("\t2: Search by username");
 			System.out.println("----------------------");
 		 
 
@@ -536,6 +550,33 @@ public class DBproject{
 	
 	}
 
+
+	public static void ViewStatistics(DBproject esql) {//11 
+		try {
+			String user;
+			//String post;
+
+			System.out.print("Enter the username you want to see: ");
+			user = in.readLine();
+			System.out.println("Here are the statistics of that post from that user! \n");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id,likes,date_posted,num_comments,tags FROM Post WHERE username_id = '%s' ORDER BY DESC;", user));
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
+
+	
+	public static void PopularPhotos(DBproject esql) {//12 
+		try {
+			System.out.println("Here are our most popular photos! \n");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Post GROUP BY post.likes ORDER BY likes DESC;"));
+			System.out.print("\n");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}
+	}
+
+
 	public static void PopularUsers(DBproject esql) {//13 
 		try {
 			System.out.println("Here are the popular users: \n");
@@ -545,6 +586,25 @@ public class DBproject{
 			System.out.println(e.getMessage() + "\n");
 		}
 	}
+
+	public static void CommentPost(DBproject esql) {//15 
+		try {
+			String user;
+			String comment;
+
+			System.out.print("Enter the user you want to comment on: ");
+			user = in.readLine();
+			System.out.print("Enter your comment: ");
+			comment = in.readLine();
+
+			String query = String.format("INSERT INTO PostComment (username_id, comment) VALUES ('%s', '%s');", user, comment);
+			esql.executeUpdate(query);
+
+			System.out.println("Successfully added comment!\n"); 
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "\n");
+		}	
+
 	public static void TagAUser(DBproject esql) {//14
 		try {
 			String post_id_string;
@@ -568,5 +628,6 @@ public class DBproject{
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
+
 	}
 }
