@@ -29,20 +29,6 @@ NOTE:
 3. Run run.sh executes src code with inputs dbname, port, user.
 
 example: 
-`run.sh flightDB 7432 hbae003`
 
-or `source ./run.sh flightDB 5432 user`
-
-`java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER`
-
-# Extra Functionalities
-
-- We added an extra "restart.sh" scripts that the user can easily run instead of typing all three shell scripts out
-- We split up the user prompt so that it will be easier for the user to keep track of what they're inputing
-
-# Encounter Problems
-If the steps above fail, make sure to type this into the command line.
-
-cp ../data/*.csv /tmp/$USER/myDB/data/.
-
-psql -h localhost -p $PGPORT $USER"_DB" < ../sql/create.sql
+- `java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER`
+- `/run.sh $DBNAME $PORT $USER `
