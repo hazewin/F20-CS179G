@@ -265,7 +265,9 @@ public class DBproject{
 				System.out.println("13. List out most popular users of the database");
 				System.out.println("14. Tag a user in a post");
 				System.out.println("15. Comment on a user's post");
-				System.out.println("16. EXIT\n");
+				System.out.println("16. Upload a photo to file system!");
+				System.out.println("17. Download a photo locally");
+				System.out.println("18. EXIT\n");
 				
 				switch (readChoice()){
 					case 1: AddUser(esql); break;
@@ -283,7 +285,7 @@ public class DBproject{
 					case 13: PopularUsers(esql); break;
 					case 14: TagAUser(esql); break;
 					case 15: CommentPost(esql); break;
-					case 16: keepon = false; break;
+					case 18: keepon = false; break;
 					default : System.out.println("Unrecognized choice! Try again."); break;
 				}
 			}
