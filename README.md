@@ -42,3 +42,5 @@ Hadoop HDFS Commands :
 - https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-common/FileSystemShell.html
 
 
+# Documentation
+https://docs.google.com/document/d/1RR-bhMPnRjpU_DIdEgVDU9swNWHiZHZoLD3VJk-ux94/edit?usp=sharing
