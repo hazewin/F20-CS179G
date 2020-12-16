@@ -217,12 +217,12 @@ public class DBproject{
 	 * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
 	 */
 	public static void main (String[] args) {
-		if (args.length != 3) {
-			System.err.println (
-				"Usage: " + "java [-classpath <classpath>] " + DBproject.class.getName () +
-		            " <dbname> <port> <user>");
-			return;
-		}//end if
+		// if (args.length != 3) {
+		// 	System.err.println (
+		// 		"Usage: " + "java [-classpath <classpath>] " + DBproject.class.getName () +
+		//             " <dbname> <port> <user>");
+		// 	return;
+		// }//end if
 		
 		DBproject esql = null;
 		
@@ -239,10 +239,13 @@ public class DBproject{
 			}
 			
 			System.out.println("(2)");
-			String dbname = args[0];
-			String dbport = args[1];
-			String user = args[2];
+			//String dbname = args[0];
+			//String dbport = args[1];
+			//String user = args[2];
 			
+			String dbname = "titillaty_DB";
+			String dbport = "9999";
+			String user = "titillaty";
 			esql = new DBproject (dbname, dbport, user, "");
 			
 			boolean keepon = true;
@@ -260,11 +263,11 @@ public class DBproject{
 				System.out.println("8. View photos based on users"); //view pictures of the user
 				System.out.println("9. View photos based on date"); //view posts based on date
 				System.out.println("10. View newsfeed of top photos"); //view news feed of who username is following
-				System.out.println("11. View statistics of a photo");
-				System.out.println("12. List top photos of the database");
-				System.out.println("13. List out most popular users of the database");
-				System.out.println("14. Tag a user in a post");
-				System.out.println("15. Comment on a user's post");
+				System.out.println("11. List top photos of the database"); //view top photos of the entire database (likes)
+				System.out.println("12. List out most popular users of the database"); // view top users based on followers
+				System.out.println("13. Tag a user in a post"); // tag another user on the post
+				System.out.println("14. Upload a photo to file system!"); // upload a file to HDFS
+				System.out.println("15. Download a photo (locally)!"); // download a file from HDFS
 				System.out.println("16. EXIT\n");
 				
 				switch (readChoice()){
@@ -276,13 +279,13 @@ public class DBproject{
 					case 6: SearchProfileBasedOnTags(esql); break;
 					case 7: ViewPhotosByTag(esql); break;
 					case 8: ViewPhotosOfUser(esql); break;
-          case 9: ViewPhotosOnDate(esql); break;
+          			case 9: ViewPhotosOnDate(esql); break;
 					case 10: ViewNewsFeedOfFollowing(esql); break;
-					case 11: ViewStatistics(esql); break;
-					case 12: PopularPhotos(esql); break;
-					case 13: PopularUsers(esql); break;
-					case 14: TagAUser(esql); break;
-					case 15: CommentPost(esql); break;
+					case 11: PopularPhotos(esql); break;
+					case 12: PopularUsers(esql); break;
+					case 13: TagAUser(esql); break;
+					case 14: UploadPhoto(); break;
+					case 15: DownloadPhoto(); break;
 					case 16: keepon = false; break;
 					default : System.out.println("Unrecognized choice! Try again."); break;
 				}
@@ -359,7 +362,7 @@ public class DBproject{
 			String sql_stmt_3 = String.format("INSERT INTO UserProfile (profile_id, username_id, num_posts, followers, followings, follow_status) VALUES ('%d','%s', '%d', '%d', '%d', '%s');", user_id, username, 0, 0, 0, "TRUE");
 			esql.executeUpdate(sql_stmt_3);
 
-			System.out.println("\n\t\t\tSuccessfully added new user!\n");
+			System.out.println("\n\tSuccessfully added new user!\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -367,33 +370,45 @@ public class DBproject{
 
 	public static void AddPost(DBproject esql) {//2
 		// Given a post_id, username, date_posted, tags, and photo_url, add a post in the DB
-		int default_num = 0;
 		try{
-			String query = "INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
-			String input = "";
+			//String query = "INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES (";
+			//String input = "";
+			
+			int post_id;
+			String post_id_inString;
+			String username;
+			String date;
+			String tags;
+			String fs;
 	 
 			System.out.print("\tEnter Post_ID: ");
-			input = in.readLine();
-			query += "'" + input + "', ";
+			post_id_inString = in.readLine();
 			System.out.print("\tEnter Username: ");
-			input = in.readLine();
-			query += "'" + input + "', ";
-			/* SET DEFAULT LIKES TO ZERO */
-			query += "'" + default_num + "', ";			
+			username = in.readLine();		
 			System.out.print("\tEnter Date Posted (Ex: MM/DD/YYYY): ");
-			input = in.readLine();
-			query += "'" + input + "', ";
-			/* SET DEFAULT COMMENTS TO ZERO */
-			query += "'" + default_num + "', ";
+			date = in.readLine();
 			System.out.print("\tEnter One Tag: ");
-			input = in.readLine();
-			query += "'" + input + "', ";
-			System.out.print("\tEnter Photo_URL: ");
-			input = in.readLine();
-			query += "'" + input + "');";
+			tags = in.readLine();
+			System.out.print("\tEnter Photo File Location: ");
+			fs = in.readLine();
 
-	 
+			post_id = Integer.parseInt(post_id_inString);
+
+			String query = String.format("INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES ('%d','%s', '%d', '%s', '%d', '%s', '%s');", post_id, username, 0, date, 0, tags, fs);
 			esql.executeUpdate(query);
+
+			// ADD PHOTO TO HDFS
+			String cmd="hadoop fs -put " + fs + " /instagram/" + username + "/" + username + "-" + post_id + ".jpg";
+			//System.out.println(cmd);
+
+			Runtime run = Runtime.getRuntime();
+			Process pr = run.exec(cmd);
+			pr.waitFor();
+			BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			String line = "";
+			while((line=buf.readLine())!=null) {
+				System.out.println(line); }
+
 			System.out.println("\n\tSuccessfully added a new post!\n");
 		 }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -417,15 +432,15 @@ public class DBproject{
 			String user_being_followed;
 			String user_follower;
 
-			System.out.print("Enter the user you want to follow: ");
-			user_follower = in.readLine();
 			System.out.print("Enter your username: ");
+			user_follower = in.readLine();
+			System.out.print("Enter user you want to follow: ");
 			user_being_followed = in.readLine();
 
 			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_follower, user_being_followed);
 			esql.executeUpdate(sql_stmt);
 
-			System.out.println("Successfully added new follower!\n");
+			System.out.println("You are now following: " + user_follower + "\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -465,7 +480,8 @@ public class DBproject{
 			String hashtag = in.readLine();
 
 			//Executes quesry and prints the result
-			esql.executeQueryAndPrintResult("select photo_url from post where tags = '#" + hashtag + "'");
+			//esql.executeQueryAndPrintResult("select photo_url from post where tags = '#" + hashtag + "'");
+			esql.executeQueryAndPrintResult(String.format("SELECT photo_url FROM Post WHERE tags = '%s';", hashtag));
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -477,9 +493,10 @@ public class DBproject{
 		//Print menu so user can search for a User bases on their full name or their username
 		try{
 			System.out.println("\n");
+			System.out.println("\tEnter 1 or 2:\n");
 			System.out.println("\t1: Search by Full Name");
 			System.out.println("\t2: Search by username");
-			System.out.println("----------------------");
+			System.out.println("---------------------------------");
 		 
 
 			switch(readChoice()){
@@ -525,11 +542,11 @@ public class DBproject{
 		}
 	}
 
-	public static void ViewNewsFeedOfFollowing(DBproject esql) {
+	public static void ViewNewsFeedOfFollowing(DBproject esql) { // 10
 		// Enter a username and view a news feed of who they are following 
 		try{
 			//Asks for username to view newsfeed of
-			System.out.print("Enter a users full name to view their newsfeed: ");
+			System.out.print("Enter a users FULL NAME to view their newsfeed: ");
 			String fullName = in.readLine();
 
 			//executes sql statement that returns a list of people user is following
@@ -551,25 +568,11 @@ public class DBproject{
 	}
 
 
-	public static void ViewStatistics(DBproject esql) {//11 
-		try {
-			String user;
-			//String post;
-
-			System.out.print("Enter the username you want to see: ");
-			user = in.readLine();
-			System.out.println("Here are the statistics of that post from that user! \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id,likes,date_posted,num_comments,tags FROM Post WHERE username_id = '%s' ORDER BY DESC;", user));
-		} catch (Exception e) {
-			System.out.println(e.getMessage() + "\n");
-		}
-	}
-
 	
-	public static void PopularPhotos(DBproject esql) {//12 
+	public static void PopularPhotos(DBproject esql) {//11 
 		try {
-			System.out.println("Here are our most popular photos! \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id FROM Post GROUP BY post.likes ORDER BY likes DESC;"));
+			System.out.println("Here are our top 10 most popular photos! \n");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id,likes,photo_url FROM Post ORDER BY likes DESC LIMIT 10;"));
 			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
@@ -577,17 +580,17 @@ public class DBproject{
 	}
 
 
-	public static void PopularUsers(DBproject esql) {//13 
+	public static void PopularUsers(DBproject esql) {//12 
 		try {
-			System.out.println("Here are the popular users: \n");
-			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC;"));
+			System.out.println("Here are our top 10 most popular users: \n");
+			esql.executeQueryAndPrintResult(String.format("SELECT username_id, COUNT(*) AS follower FROM UserFollowing GROUP BY username_id ORDER BY follower DESC LIMIT 10;"));
 			System.out.print("\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
 	}
 
-	public static void CommentPost(DBproject esql) {//15 
+	public static void CommentPost(DBproject esql) { 
 		try {
 			String user;
 			String comment;
@@ -603,9 +606,10 @@ public class DBproject{
 			System.out.println("Successfully added comment!\n"); 
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
-		}	
+		}
+	}	
 
-	public static void TagAUser(DBproject esql) {//14
+	public static void TagAUser(DBproject esql) {//13
 		try {
 			String post_id_string;
 			int post_id;
@@ -624,10 +628,68 @@ public class DBproject{
 			//String sql_stmt1 = String.format("SELECT tagged FROM UserTagged WHERE pid = '%d';", post_id);
 			//esql.executeUpdate(sql_stmt1);
 			
-			System.out.println("Successfully added new tag!\n");
+			System.out.println("Successfully tagged " + taggeduser + " in post #" + post_id + "\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
+	}
 
+	public static void UploadPhoto() { //14
+		try {
+
+			String user;
+			String num;
+			String fs;
+
+			System.out.print("Enter username: ");
+			user = in.readLine();
+			System.out.print("Enter post #: ");
+			num = in.readLine();
+			System.out.print("Input File Location: ");
+			fs = in.readLine();
+
+			String cmd="hadoop fs -put " + fs + " /instagram/" + user + "/" + user + "-" + num + ".jpg";
+			System.out.println(cmd);
+
+			Runtime run = Runtime.getRuntime();
+			Process pr = run.exec(cmd);
+			pr.waitFor();
+			BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			String line = "";
+			while((line=buf.readLine())!=null) {
+				System.out.println(line); }
+			System.out.println("Successfully uploaded photo to HDFS!");
+		} catch (Exception e) {
+				e.printStackTrace();
+			}	
+	}
+
+
+	public static void DownloadPhoto() { //15
+		try {
+			String user;
+			String num;
+
+			System.out.print("Enter username: ");
+			user = in.readLine();
+			System.out.print("Enter post #: ");
+			num = in.readLine();
+
+			//String cmd="hadoop fs -mkdir /test/javatest";
+			String cmd="hadoop fs -get /instagram/" + user + "/" + user + "-" + num + ".jpg" + " /Users/titillaty/F20-CS179G/downloadedPhotos/";
+			System.out.println(cmd);
+			Runtime run = Runtime.getRuntime();
+			Process pr = run.exec(cmd);
+			pr.waitFor();
+			BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			String line = "";
+			while((line=buf.readLine())!=null) {
+				System.out.println(line); }
+			System.out.println("Photo successfully downloaded!");
+		} catch (Exception e) {
+				e.printStackTrace();
+			}	
 	}
 }
+
+
