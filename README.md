@@ -4,7 +4,7 @@ hnguy154/Hazel Nguyen: 862054134
 
 stsan003/Sandy Tsan: 861299012
 
-ahern001/Ashly Hernandez:
+ahern001/Ashly Hernandez: 862018436
 
 # Deploy Application
 1. Start HDFS system in Pseudo-Distributed Mode
