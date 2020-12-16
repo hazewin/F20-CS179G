@@ -362,6 +362,19 @@ public class DBproject{
 			String sql_stmt_3 = String.format("INSERT INTO UserProfile (profile_id, username_id, num_posts, followers, followings, follow_status) VALUES ('%d','%s', '%d', '%d', '%d', '%s');", user_id, username, 0, 0, 0, "TRUE");
 			esql.executeUpdate(sql_stmt_3);
 
+			System.out.println("\nAdding user to database...\n");
+			// MAKE DIRECTORY IN HDFS FOR NEW USER
+			String cmd="hadoop fs -mkdir /instagram/" + username;
+			//System.out.println(cmd);
+
+			Runtime run = Runtime.getRuntime();
+			Process pr = run.exec(cmd);
+			pr.waitFor();
+			BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			String line = "";
+			while((line=buf.readLine())!=null) {
+				System.out.println(line); }
+
 			System.out.println("\n\tSuccessfully added new user!\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
@@ -397,6 +410,7 @@ public class DBproject{
 			String query = String.format("INSERT INTO Post(post_id, username_id, likes, date_posted, num_comments, tags, photo_url) VALUES ('%d','%s', '%d', '%s', '%d', '%s', '%s');", post_id, username, 0, date, 0, tags, fs);
 			esql.executeUpdate(query);
 
+			System.out.println("\nAdding photo to database...\n");
 			// ADD PHOTO TO HDFS
 			String cmd="hadoop fs -put " + fs + " /instagram/" + username + "/" + username + "-" + post_id + ".jpg";
 			//System.out.println(cmd);
@@ -440,7 +454,7 @@ public class DBproject{
 			String sql_stmt = String.format("INSERT INTO UserFollowing (username_id, follower) VALUES ('%s', '%s');", user_follower, user_being_followed);
 			esql.executeUpdate(sql_stmt);
 
-			System.out.println("You are now following: " + user_follower + "\n");
+			System.out.println("You are now following: " + user_being_followed + "\n");
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "\n");
 		}
@@ -649,7 +663,7 @@ public class DBproject{
 			fs = in.readLine();
 
 			String cmd="hadoop fs -put " + fs + " /instagram/" + user + "/" + user + "-" + num + ".jpg";
-			System.out.println(cmd);
+			//System.out.println(cmd);
 
 			Runtime run = Runtime.getRuntime();
 			Process pr = run.exec(cmd);
@@ -677,7 +691,7 @@ public class DBproject{
 
 			//String cmd="hadoop fs -mkdir /test/javatest";
 			String cmd="hadoop fs -get /instagram/" + user + "/" + user + "-" + num + ".jpg" + " /Users/titillaty/F20-CS179G/downloadedPhotos/";
-			System.out.println(cmd);
+			//System.out.println(cmd);
 			Runtime run = Runtime.getRuntime();
 			Process pr = run.exec(cmd);
 			pr.waitFor();
