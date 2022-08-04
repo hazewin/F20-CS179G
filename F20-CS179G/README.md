@@ -1,45 +1,44 @@
 # F20-CS179G
 
-Hazel Nguyen: 862054134
+hnguy154/Hazel Nguyen: 862054134
 
-Sandy Tsan:
+stsan003/Sandy Tsan: 861299012
 
-Ashly Hernandez:
+ahern001/Ashly Hernandez:
 
-# Running Scripts
+# Deploy Application
+1. Start HDFS system in Pseudo-Distributed Mode
+- run `bin/hdfs namenode format`
+- run `sbin/start-dfs.sh`
+2. SSH to Localhost to access HDFS file system
+- run `ssh localhost`
+- check on namenode http://localhost:9870
+3. Initialize the PSQL environment 
+- run source `./startPostgreSQL.sh`
+4. Create the database
+- run source `./createPostgreDB.sh`
+5. Run Java Interface
+- see #running java interface
 
-1. Initialize the PSQL environment by running source ./startPostgreSQL.sh
-2. Create the database by running source ./createPostgreDB.sh
-  - this will copy the csv files to the working directory and data folder of your database
-  - create tables from "create.sql" from the sql folder
-  - if failed, jump to encounter problems section
-  
-3. Run the necessary scripts by 
-
-  - psql -h localhost -p $PGPORT $USER"_DB" < script name
-  
-NOTE: 
-- Do not forget to stop the server and shutdown the database by running source ./stopPostgreDB.sh
-- Make sure to "pg_ctl status" to make sure the server is properly running
-  
 # Running Java Interface & DBproject.java
 
 1. Head to java directory
 2. Run compile.sh compiles your code in src
-3. Run run.sh executes src code with inputs dbname, port, user.
+3. Run run.sh executes src code with inputs dbname, port, user : `./run.sh $DBNAME $PORT $USER `
 
-example: run.sh flightDB 7432 hbae003
-or source ./run.sh flightDB 5432 user
-java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER
+ 
+NOTE: 
+- Do not forget to stop the server and shutdown the database by running source `./stopPostgreDB.sh`
+- Make sure to `pg_ctl status` to make sure the server is properly running
+- Do not forget to stop the hadoop file system `sbin/stop-dfs.sh`
+- Run `jps` after starting HDFS to make sure namenode, datanode, and secondary node is running properly
 
-# Extra Functionalities
 
-- We added an extra "restart.sh" scripts that the user can easily run instead of typing all three shell scripts out
-- We split up the user prompt so that it will be easier for the user to keep track of what they're inputing
+# Resources
+Hadoop (Single Node Cluster) Setup: https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Standalone_Operation
 
-# Encounter Problems
-If the steps above fail, make sure to type this into the command line.
+Hadoop HDFS Commands : 
+- https://data-flair.training/blogs/top-hadoop-hdfs-commands-tutorial/ 
+- https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-common/FileSystemShell.html
 
-cp ../data/*.csv /tmp/$USER/myDB/data/.
 
-psql -h localhost -p $PGPORT $USER"_DB" < ../sql/create.sql
